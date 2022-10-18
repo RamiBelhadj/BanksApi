@@ -1,0 +1,54 @@
+<div class="container">
+  
+  <legend>Add a new transaction</legend>
+  <form [formGroup]="transferForm" (submit)="save()" novalidate>
+    
+    <div class="mb-3">
+      <label for="accountHolder" class="form-label">accountHolder</label>
+      <input type="text" formControlName="accountHolder" name = "accountHolder" class="form-control" id="accountHolder" [ngClass]="{ 'is-invalid': submitted && f['accountHolder'].errors }">
+      <div *ngIf="submitted && f['accountHolder'].errors" class="invalid-feedback">
+        <div *ngIf="f['accountHolder'].errors['required']">Account Holder is required</div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="amount" class="form-label">amount</label>
+      <input type="number" formControlName="amount" name = "amount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['amount'].errors }">
+      <div *ngIf="submitted && f['amount'].errors" class="invalid-feedback">
+        <div *ngIf="f['amount'].errors['matching']">the amount of the transaction should be between 500 and 2000000</div>
+      </div>
+    </div>
+  
+    <div class="mb-3">
+      <label for="date" class="form-label">date</label>
+      <div class="input-group">
+        <input class="form-control" type = "text" formControlName="date" name="date"  ngbDatepicker #d="ngbDatepicker" [ngClass]="{ 'is-invalid': submitted && f['date'].errors }" [attr.disabled]="true" required>
+        <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+      </div>
+      <div *ngIf="submitted && f['date'].errors" class="invalid-feedback">
+        <div *ngIf="f['date'].errors['error']">Please select a future date</div>
+      </div>
+    </div>
+  
+    <div class="mb-3">
+      <label for="iban" class="form-label">iban</label>
+      <input type="text" formControlName="iban" name = "iban" class="form-control" [ngClass]="{ 'is-invalid': submitted && f['iban'].errors }" required>
+      <div *ngIf="submitted && f['iban'].errors" >
+        <div *ngIf="f['iban'].errors['required']">
+          IBAN is required.
+        </div>
+        <div *ngIf="f['iban'].dirty && f['iban'].invalid">
+            
+          IBAN is invalid
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="note" class="form-label">note</label>
+      <input class="form-control" type = "text" formControlName="note" name = "note" class="form-control">
+    </div>
+      
+    <button type="submit" class="btn btn-dark">Create</button>
+  </form>
+</div> 

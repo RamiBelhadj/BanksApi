@@ -1,0 +1,68 @@
+<h3>Transfer List</h3>
+
+<div class="row g-3 mb-3">
+  <div class="col-auto">
+    <input type="text" class="form-control" (keyup)="applyFilter($event)" placeholder="Search" >
+  </div>
+</div>
+
+<table class="table align-middle bg-white mb-3" >
+  
+  <thead class="bg-light">
+    <tr>
+      <th scope="col">accountHolder</th>
+      <th scope="col">iban</th>
+      <th scope="col" sortable="date" (sort)="onSort($event)">date</th>
+      <th scope="col" sortable="amount" (sort)="onSort($event)">amount</th>
+      <th scope="col">note</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  
+    <tr *ngFor="let transfer of (transfers)">
+      <th scope="row">
+        {{transfer.accountHolder}}
+      </th>
+      <td>{{transfer.iban | ibanFormatter}}</td>
+      <td>{{transfer.date | date:'dd.MM.y'}}</td>
+      <td>{{transfer.amount | currency:'EUR'}}</td>
+      <td>{{transfer.note}}</td>
+      <td>
+        <button [routerLink]="['/edit', transfer.id]" class="btn btn-outline-primary">
+          Edit
+        </button>
+      </td>
+      <td>
+        <button (click)="onDeleteModal(transfer.id)" type="button" class="btn btn-outline-danger">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="row ">
+  <div class="col col-md-5 offset-md-5">
+	<a routerLink="/add" class="btn btn-success">Add A New Transfer</a>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are sure to delete this item?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="delete()">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
