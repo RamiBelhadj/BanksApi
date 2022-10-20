@@ -4,7 +4,7 @@ import { Transfers } from "./transfers";
 
 import { deleteTransferAPISuccess, saveNewTransferAPISuccess, transfersFetchAPISuccess, updateTransferAPISuccess } from "./transfers.action";
 
-export const initialState: ReadonlyArray<Transfers> = []; 
+export const initialState: Transfers[] = []; 
 
 export const transferReducer = createReducer(
     initialState,

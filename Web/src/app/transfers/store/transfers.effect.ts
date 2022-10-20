@@ -1,7 +1,7 @@
 import { Injectable} from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { select, Store} from '@ngrx/store'
-import {  EMPTY, map, mergeMap, switchMap, withLatestFrom } from 'rxjs'
+import {  EMPTY, exhaustMap, map, merge, mergeMap, switchMap, withLatestFrom } from 'rxjs'
 import { TransferService } from 'src/app/services/transfer.service'
 import { setAPIStatus } from 'src/app/shared/store/app.action'
 import { Appstate } from 'src/app/shared/store/appstate'
@@ -22,23 +22,16 @@ export class TransfersEffect {
     loadAllTransfers$ = createEffect(() =>
         this.action$.pipe(
             ofType(invokeTransferAPI),
-            withLatestFrom(this.store.pipe(select(selectTransfers))),
-            mergeMap(([, transferformStore]) => {
-                
-                if (transferformStore.length > 0){
-                   
-                    return EMPTY
-                }
-                
-                return this.transfersService.getAll().pipe(map((data) => transfersFetchAPISuccess({allTransfers: data})))
-            })
+            exhaustMap(() => 
+                this.transfersService.getAll().pipe(map((data) => transfersFetchAPISuccess({allTransfers: data})))
+            )   
         )
     )
 
     saveNewTransfer$ = createEffect(() => {
         return this.action$.pipe(
             ofType(invokeSaveNewTransferAPI),
-            switchMap((action) =>{
+            mergeMap((action) =>{
                 this.appStore.dispatch(
                     setAPIStatus({
                         apiStatus:{
@@ -64,7 +57,7 @@ export class TransfersEffect {
     updateTransferAPI$ = createEffect(() => {
         return this.action$.pipe(
             ofType(invokeUpdateTransferAPI),
-            switchMap((action) => {
+            mergeMap((action)=>{
                 this.appStore.dispatch(
                     setAPIStatus({
                         apiStatus: { apiResponseMessage: '', apiStatus : ''}
@@ -81,14 +74,15 @@ export class TransfersEffect {
                     })
                 )
             })
+            
         )
     })
 
     deleteTransferAPI$ = createEffect(() =>{
         return this.action$.pipe(
             ofType(invokeDeleteTransferAPI),
-            switchMap((actions) => {
-                console.log(actions.id)
+            mergeMap((actions) => {
+                
                 this.appStore.dispatch(
                     setAPIStatus({apiStatus : {
                         apiResponseMessage:'', apiStatus: ''

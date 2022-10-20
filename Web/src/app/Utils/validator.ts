@@ -57,8 +57,7 @@ export default class Validation {
   static iban() : ValidatorFn {
     return (controls: AbstractControl) =>{
         if (controls.value){
-            console.log('aaaaaaa')
-            console.log(ValidatorService.validateIban(controls))
+            
             return ValidatorService.validateIban(controls)
         }
         return null

@@ -8,16 +8,14 @@ import { transferReducer } from './store/transfers.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { TransfersEffect } from './store/transfers.effect';
 import { AngularIbanModule } from 'angular-iban';
-import { AddComponent } from './add/add.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { EditComponent } from './edit/edit.component';
+import { EditAddComponent } from './edit-add/edit-add.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
     HomeComponent,
-    AddComponent,
-    EditComponent,
+    EditAddComponent,
     NgbdSortableHeader
   ],
   imports: [

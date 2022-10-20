@@ -1,25 +1,24 @@
 import { DatePipe } from '@angular/common';
-import { compileNgModule } from '@angular/compiler';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 import { NgbDateParserFormatter, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { StoreModule } from '@ngrx/store';
-import { CustomDateParserFormatter } from 'src/app/data-formatter.service';
-import { Transfers } from '../store/transfers';
+import { CustomDateParserFormatter } from 'src/app/services/data-formatter.service';
 
-import { AddComponent } from './add.component';
+import { EditAddComponent } from './edit-add.component';
 
-describe('AddComponent', () => {
-  let component: AddComponent;
-  let fixture: ComponentFixture<AddComponent>;
+describe('Edit/AddComponent', () => {
+  let component: EditAddComponent;
+  let fixture: ComponentFixture<EditAddComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormsModule, StoreModule.forRoot({},{}),NgbModule], 
-      declarations:[AddComponent],
+      imports: [ReactiveFormsModule, FormsModule, StoreModule.forRoot({},{}),NgbModule, RouterTestingModule], 
+      declarations:[EditAddComponent],
       providers:[DatePipe,{provide: NgbDateParserFormatter,useClass: CustomDateParserFormatter}]
     })
-    fixture = TestBed.createComponent(AddComponent)
+    fixture = TestBed.createComponent(EditAddComponent)
     component = fixture.componentInstance
     component.ngOnInit()
   });   

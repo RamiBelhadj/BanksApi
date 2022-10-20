@@ -13,7 +13,7 @@ export class TransferService {
   baseUrl:string = 'http://localhost:3000/transfer';
   constructor(private http: HttpClient) { }
   
-  getAll(){
+  getAll():Observable<Transfers[]>{
     return this.http.get<Transfers[]>(this.baseUrl);
   }
 

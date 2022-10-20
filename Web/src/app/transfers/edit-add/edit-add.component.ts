@@ -5,7 +5,7 @@ import { switchMap } from 'rxjs';
 import { selectAppState } from 'src/app/shared/store/app.selector';
 import { Appstate } from 'src/app/shared/store/appstate';
 import { Transfers } from '../store/transfers';
-import { invokeUpdateTransferAPI } from '../store/transfers.action';
+import { invokeSaveNewTransferAPI, invokeUpdateTransferAPI } from '../store/transfers.action';
 import { selectTransferById } from '../store/transfers.selector';
 import { setAPIStatus } from 'src/app/shared/store/app.action';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -13,11 +13,11 @@ import { ValidatorService } from 'angular-iban';
 import Validation from 'src/app/Utils/validator';
 
 @Component({
-  selector: 'app-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css']
+  selector: 'app-edit-add',
+  templateUrl: './edit-add.component.html',
+  styleUrls: ['./edit-add.component.css']
 })
-export class EditComponent implements OnInit {
+export class EditAddComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
@@ -40,27 +40,28 @@ export class EditComponent implements OnInit {
     accountHolder:'',
     amount : 0,
     iban : '',
-    note : ''
+    note : '',
+    date : (new Date()).toISOString()
   }
   
   ngOnInit(): void {
     
     let fetchData$ = this.route.paramMap.pipe(
       switchMap((params) => {
+        
         var id = params.get('id')
-         
-        return this.store.pipe(select(selectTransferById(id)))
-        //return 
+        if(id)
+          return this.store.pipe(select(selectTransferById,{id:id}))
+        return []
       })
     )
-    fetchData$.subscribe((data) => {
-      if (data) {
-          this.transfer= {...data}
-        
-        
-      }
-      else this.router.navigate(['/']);
-    })
+    
+      fetchData$.subscribe((data) => {
+        if (data) {
+            this.transfer= {...data}
+        }
+      })
+    
     this.transferForm = this.fb.group({
       accountHolder: [this.transfer.accountHolder,Validators.required],
       amount : [this.transfer.amount,Validators.required],
@@ -79,6 +80,7 @@ export class EditComponent implements OnInit {
   get f(): { [key: string]: AbstractControl } {
     return this.transferForm.controls;
   }
+
   update() {
     this.submitted = true
     if (this.f['accountHolder'].errors || this.f['amount'].errors || this.f['iban'].errors || this.f['date'].errors ){
@@ -96,12 +98,16 @@ export class EditComponent implements OnInit {
       note: this.transferForm.get('note').value,
       id: this.transfer.id
     }
-
-    this.store.dispatch( 
-      invokeUpdateTransferAPI({
-        updateTransfer : {...transfer}
-      })
-    )
+    if(this.transfer.id === undefined) {
+      this.store.dispatch(invokeSaveNewTransferAPI({newTransfer:transfer}))
+    }
+    else {
+      this.store.dispatch( 
+        invokeUpdateTransferAPI({
+          updateTransfer : {...transfer}
+        })
+      )
+    }
     let apiStatus$  = this.appStore.pipe(select(selectAppState))
     apiStatus$.subscribe((appState) => {
       if (appState.apiStatus == 'success'){

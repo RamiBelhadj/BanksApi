@@ -1,9 +1,9 @@
 [
   {
     "accountHolder": "Max Mustermann",
-    "amount": 350,
+    "amount": 1000,
     "iban": "DE75512108001245126199",
-    "date": "2022-07-01T16:36:49.594Z",
+    "date": "2022-07-01T18:16:41.375Z",
     "note": "A new transfer",
     "id": "048a4a03-18ff-4ed4-a239-f6b5bc82b72f"
   },
@@ -33,9 +33,9 @@
   },
   {
     "accountHolder": "Max Musterjunge",
-    "amount": 500,
     "iban": "DE75512108001245126199",
-    "date": "2022-07-05T09:04:40.968Z",
+    "amount": 500,
+    "date": "2022-07-05T15:55:46.936Z",
     "note": "A new transfer",
     "id": "7ae46136-dfab-4452-b361-03c2cd6e3541"
   }
